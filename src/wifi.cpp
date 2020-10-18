@@ -1,3 +1,5 @@
+#ifdef ESP8266
+
 #include <Arduino.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266WiFi.h>
@@ -27,7 +29,6 @@ void handleNotFound() {
 
 void setupWiFi() {
     WiFi.hostname("esptest1");
-    WiFi.begin("wfdaniach", "1596753123");
     Serial.print("Connecting");
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
@@ -67,3 +68,5 @@ void setupWiFi() {
 void loopWiFi() {
     server.handleClient();
 }
+
+#endif
