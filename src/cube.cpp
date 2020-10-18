@@ -4,10 +4,9 @@
 // cube[z][x] = y (binary encoded).
 uint8_t cube[8][8];
 
-#define writePulse(value)      \
-    digitalWrite(MOSI, value); \
-    digitalWrite(SCK, LOW);    \
-    digitalWrite(SCK, HIGH);
+Cube::Cube() {
+    Serial.println("Hello");
+}
 
 #define setVoxel(x, y, z)                      \
     if (x % 2 == 0) {                          \
@@ -20,18 +19,13 @@ void voxelExplorer() {
     static int x = 0;
     static int y = 0;
     static int z = 0;
-    static uint16_t timer = 0;
 
-    timer++;
+    // Wait some time before moving the voxel.
+    ASYNC_DELAY(50);
 
     clearCube();
     setVoxel(x, y, z);
 
-    if (timer < 50) {
-        return;
-    }
-
-    timer = 0;
     if (++x >= 8) {
         x = 0;
         y++;
@@ -46,15 +40,11 @@ void voxelExplorer() {
 }
 
 void loopCube() {
-    rain();
+    voxelExplorer();
     renderCube();
 }
 
 void setupCube() {
-    // Enable serial for debug.
-    Serial.begin(9600);
-    Serial.println();
-
     // Enable the SPI pins.
     pinMode(SS, OUTPUT);
     pinMode(MOSI, OUTPUT);
@@ -94,14 +84,6 @@ void clearCube() {
         fill(z, 0);
     }
 }
-
-// ASYNC_DELAY returns the caller function until the specified
-// interval (in ms) has past.
-#define ASYNC_DELAY(x)               \
-    static unsigned long __last = 0; \
-    unsigned long __cur = millis();  \
-    if (__cur - __last < x) return;  \
-    __last = __cur;
 
 void rain() {
     ASYNC_DELAY(RAIN_SPEED);

@@ -3,6 +3,19 @@
 
 #include <Arduino.h>
 
+#define writePulse(value)      \
+    digitalWrite(MOSI, value); \
+    digitalWrite(SCK, LOW);    \
+    digitalWrite(SCK, HIGH);
+
+// ASYNC_DELAY returns the caller function until the specified
+// interval (in ms) has past.
+#define ASYNC_DELAY(x)               \
+    static unsigned long __last = 0; \
+    unsigned long __cur = millis();  \
+    if (__cur - __last < x) return;  \
+    __last = __cur;
+
 #define POS_X 0
 #define NEG_X 1
 #define POS_Z 2
@@ -18,9 +31,20 @@
 void setVoxel(int x, int y, int z);
 void shift(int);
 void renderCube();
-void rain();
 void clearCube();
 
+// Effects.
+void rain();
+void voxelExplorer();
+
 extern uint8_t cube[8][8];
+
+class Cube {
+   private:
+    uint8_t _state[8][8];
+
+   public:
+    Cube();
+};
 
 #endif /* !__CUBE_H__ */
