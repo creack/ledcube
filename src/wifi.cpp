@@ -4,6 +4,7 @@
 #include <ESP8266WebServer.h>
 #include <ESP8266WiFi.h>
 
+#include "credentials.h"
 #include "cube.h"
 
 ESP8266WebServer server(80);
@@ -29,6 +30,8 @@ void handleNotFound() {
 
 void setupWiFi() {
     WiFi.hostname("esptest1");
+    WiFi.begin(WIFI_SSID, WIFI_PW);
+
     Serial.print("Connecting");
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
